@@ -14,30 +14,25 @@ _, threshold = cv2.threshold(grey_img, 0, 1, cv2.THRESH_OTSU)
 #find the contour of the thresholded image
 contours,heirarchy = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-
-indicies = np.where(threshold != [0])
-
 #indices [0] = y-coordinates
 #indices [1] = x-coordinates
-coordinates = list(zip(indicies[1],indicies[0]))
+indicies = np.where(threshold != [0])
 
-
-#empty lists
 center_points = []
 areas = []
  
 #loop for the contours
-for i in contours:
+for contour in contours:
     #find the center point for each contoured region and add them to a list
-    M = cv2.moments(i)
-    cx = int(M['m10']/M['m00'])
-    cy = int(M['m01']/M['m00'])
-    center_points.append((cx,cy))
-    
-    #find the area for each contoured region and add them to a list
+    M = cv2.moments(contour)
+    center_x = int(M['m10']/M['m00'])
+    center_y = int(M['m01']/M['m00'])
+    center_points.append((center_x, center_y))
+
     area = M['m00']
     areas.append(area)
-    
+
+
 
 #function to find max area from areas list   
 def max_area(nums):
@@ -47,8 +42,6 @@ def max_area(nums):
             current_max = num
     return current_max
 
-#position on list where greatest area can be found 
-index_greatest_area = areas.index(max_area(areas))
-
-greatest_area_center_point = center_points[index_greatest_area]
-
+#using greatest area index to find centerpoint coordinate of greatest area
+greatest_area_index = areas.index(max_area(areas))
+greatest_area_center_point = center_points[greatest_area_index]
