@@ -23,16 +23,16 @@ areas = []
  
 #loop for the contours
 for contour in contours:
-    #find the center point for each contoured region and add them to a list
+    #find the center point for each region and add them to a list
     M = cv2.moments(contour)
     center_x = int(M['m10']/M['m00'])
     center_y = int(M['m01']/M['m00'])
     center_points.append((center_x, center_y))
-
+    
+    #find the area for each region and add them to a list
     area = M['m00']
     areas.append(area)
-
-
+    
 
 #function to find max area from areas list   
 def max_area(nums):
